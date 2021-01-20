@@ -1,3 +1,5 @@
+import random
+
 
 def task1():
     # Ввести три числа m, n, p. Подсчитать количество отрицательных чисел.
@@ -30,5 +32,15 @@ def task2():
             print(f'{ticket} and {ticket + 1} are lucky')
 
 
-task2()
+def task3():
+    # Найти значение минимального элемента списка.
+    n = int(input("Enter list size"))
 
+    a = []
+    for i in range(n):
+        random_int = random.randint(0, 99)
+        a.append(random_int)
+
+    print(min(a))
+
+task3()

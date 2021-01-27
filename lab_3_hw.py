@@ -1,4 +1,9 @@
 
+class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
 
 class Triangle:
     def __init__(self, point1, point2, point3):
@@ -12,14 +17,14 @@ class Triangle:
                 self.get_length(self.point1, self.point3))
 
     def get_length(self, point1, point2):
-        length = ((point1[0] - point1[0]) ** 2 + (point1[1] - point2[1]) ** 2) ** 0.5
+        length = ((point1.x - point2.x) ** 2 + (point1.y - point2.y) ** 2) ** 0.5
         return length
 
     def coordinates(self):
-        print(self.point1)
-        print(self.point2)
-        print(self.point3)
+        print(self.point1.x, self.point1.y)
+        print(self.point2.x, self.point2.y)
+        print(self.point3.x, self.point3.y)
 
 
-t = Triangle([0, 1], [1, 2], [3, 10])
+t = Triangle(Point(0, 1), Point(1, 2), Point(3, 10))
 print(t.get_perimeter())

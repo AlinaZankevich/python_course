@@ -70,7 +70,7 @@ print(a)'''
 # print(b)
 
 
-class Circle:
+'''class Circle:
     def __init__(self, radius):
         self.radius = radius
 
@@ -79,9 +79,10 @@ class Circle:
 
 
 class Rect:
-    def __init__(self, a, b):
-        self.a = a
-        self.b = b
+    def __init__(self, pa, pb):
+        self.ma = pa    # pa - это параметр..создали атрибут(ma) по имени ma у обхкета(self) класса Rect
+        self.mb = pb
+        
 
     def get_perimeter(self):
         return 2 * (self.a + self.b)
@@ -96,10 +97,71 @@ class Square(Rect):
 c = Circle(5)
 r = Rect(3, 7)
 sq = Square(4)
-
+..
 figures = [c, sq, r]
 for f in figures:
-    print(f.get_perimeter())
+    print(f.get_perimeter())'''
+
+# Инкапсуляция
+# class B:
+#     count = 0
+#
+#     def __init__(self):
+#         B.count += 1
+#         self.count_2 = 1
+#
+#     def __del__(self):
+#         B.count -= 1
+#
+# a = B() # создалa обйукт класса B
+# b = B()
+# print(B.count)
+# del a
+# print(B.count)
+#
+# class B:
+#     __count = 0
+#
+#     def __init__(self):
+#         B.__count += 1
+#         self.count_2 = 1
+#
+#     def __del__(self):
+#         B.__count -= 1
+
+# a = B()
+# print(B.__count)
+
+
+
+'''class RegularClass:
+    def __init__(self):
+        self.count = 0
+
+    def increment(self):
+        self.count += 1
+
+obj1 = RegularClass() # sozdali obect klassa regular class
+obj2 = RegularClass()
+
+obj1.increment() # vizvali metod pod nazvaniem increment
+obj1.increment()
+
+print(obj1.count)
+print(obj2.count)
+
+
+
+# a = B() # создалa обйукт класса B
+# print(B.count)
+# del a
+# print(B.count)'''
+
+
+
+
+
+
 
 
 

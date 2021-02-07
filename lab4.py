@@ -30,14 +30,26 @@ class User:
             print(f'age: {self.age}')
         print('+-------------+')
 
-
-all_users_list = []
-for i in range(10):
-
-    a = User(i)
-
-    all_users_list.append(a)  # добавляются объекты со своими атрибутами
+    def set_age(self, age):
+        self.age = age
 
 
-all_users_list[2].age = 34
-all_users_list[2].print_user()
+user = User(0)
+user.set_age(42)
+user.print_user()
+
+user2 = User(0)
+user2.set_age(11)
+user2.print_user()
+
+# all_users_list = []
+# for i in range(10):
+#
+#     a = User(i)
+#
+#     all_users_list.append(a)  # добавляются объекты со своими атрибутами
+#
+#
+# all_users_list[2].age = 34
+# all_users_list[2].print_user()
+

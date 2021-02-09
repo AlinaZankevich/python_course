@@ -61,6 +61,56 @@ class PythonOrgSearch(unittest.TestCase):
         # на странице с результатами поиска
         self.assertNotIn("No results found.", firefox.page_source)
 
+    def test_login_logout(self):
+        driver = self.driver
+        # открытие в Firefox страницы http://www.python.org/psf-landing/
+        # на которой есть кнопка Sign In
+        driver.get("https://www.python.org/psf-landing/")
+        # ждем 5 секунд
+        time.sleep(5)
+        # поиск ссылки с текстом "Sign In"
+        elem = driver.find_element_by_link_text("Sign In")
+        # нажатие на ссылку
+        elem.click()
+        # ждем 5 секунд
+        time.sleep(5)
+        # поиск текстового поля для ввода логина по XPath
+        # (тег input с name='login')
+        elem = driver.find_element_by_xpath("//input[@name='login']")
+        # ввод логина
+        elem.send_keys("AlinaZankevich")
+        # ждем 5 секунд
+        time.sleep(5)
+        # поиск текстового поля для ввода пароля по XPath
+        # (тег input с name='password')
+        elem = driver.find_element_by_xpath("//input[@name='password']")
+        # ввод логина
+        elem.send_keys("python123")
+        # ждем 5 секунд
+        time.sleep(5)
+        # жмем ввод для отправки формы
+        elem.send_keys(Keys.RETURN)
+        # ждем 5 секунд
+        time.sleep(5)
+        # проверка наличия на странице строки "Your account"
+        # после входа
+        self.assertIn("Your account", driver.page_source)
+        # ждем 5 секунд
+        time.sleep(5)
+
+        driver.get("https://www.python.org/accounts/logout/")
+
+        # поиск кнопки на форме в главной области страницы
+        # по CSS-селектору
+        elem = driver.find_element_by_css_selector(
+            'div.container section.main-content form button'
+        )  # нажатие на кнопку
+        elem.click()
+        # ждем 5 секунд
+        time.sleep(5)
+        # проверка отсутствия на странице строки "Your account"
+        # после выхода
+        self.assertNotIn("Your account", driver.page_source)
 
 
 if __name__ == '__main__':

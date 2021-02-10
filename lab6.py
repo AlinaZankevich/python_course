@@ -150,5 +150,10 @@ class PythonOrgSearch(unittest.TestCase):
             time.sleep(3)
 
 
+class PythonOrgSearchChromium(PythonOrgSearch):
+    def setUp(self):
+        self.driver = webdriver.Chrome()
+
+
 if __name__ == '__main__':
     unittest.main()

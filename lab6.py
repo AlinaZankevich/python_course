@@ -112,6 +112,43 @@ class PythonOrgSearch(unittest.TestCase):
         # после выхода
         self.assertNotIn("Your account", driver.page_source)
 
+    def test_about_breadcrumbs(self):
+        driver = self.driver
+        # открытие в Firefox страницы http://www.python.org
+        driver.get("http://www.python.org")
+        # получаем список ссылок в меню About по CSS-селектору
+        elems = driver.find_elements_by_css_selector('#about ul li a')
+        # перебираем полученные подпункты меню,
+        # выписываем названия и ссылки в отдельные списки
+        # потому что при переходе по ссылкам на другие страницы
+        # связь со списком подпунктов будет потеряна
+        href_list = []
+        name_list = []
+        for e in elems:
+            href_list.append(e.get_attribute("href"))
+            name_list.append(e.get_attribute('innerHTML'))
+
+        # перебираем полученные ссылки
+        for i in range(len(href_list) - 1):
+            # переходим по ссылке
+            driver.get(
+                href_list[i]
+            )
+            # получаем строчку хлебных крошек
+            elem = driver.find_element_by_css_selector('.breadcrumbs')
+            # проверка наличия в хлебных крошках ссылки на пункт About
+            self.assertIn("About", elem.get_attribute('innerHTML'))
+            # проверка наличия в хлебных крошках
+            # наличия названия текущего пункта
+            self.assertIn(
+                # название текущего пункта
+                name_list[i],
+                # строчка хлебных крошек
+                elem.get_attribute('innerHTML')
+            )
+            # ждем 5 секунд
+            time.sleep(3)
+
 
 if __name__ == '__main__':
     unittest.main()

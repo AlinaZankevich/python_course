@@ -159,6 +159,105 @@ class Kalkpro(unittest.TestCase):
         )
         self.assertEqual('2 м²', elem.text)
 
+    # вспомогательный метод для заполнения данных из таблиц
+    def input_from_tables(self, hei, sq, rw):
+        driver = self.driver
+        # высота
+        # находим элемент страницы по ID
+        elem = driver.find_element_by_id("js--roomСeiling_height")
+        # очищаем элемент от старого значения
+        elem.clear()
+        # вносим новое значение
+        elem.send_keys(str(hei))
+        # ширину и длину вычислим из площади в таблице:
+        # воспользуемся тем, что в таблице площадь четная,
+        # ширину будем считать равной 2
+        elem = driver.find_element_by_id("js--roomSizes_width")
+        elem.clear()
+        elem.send_keys(2)
+        # длина
+        elem = driver.find_element_by_id("js--roomSizes_length")
+        elem.clear()
+        elem.send_keys(str(sq/2))
+        # ширина рулона
+        elem = driver.find_element_by_id("js--wallpaperSizes_rollWidth")
+        elem.clear()
+        elem.send_keys(rw)
+
+    # метод для проверки работы калькулятора
+    # на таблице с шириной 53
+    def test_width_53(self):
+        driver = self.driver
+        # добавляем окно
+        elem = driver.find_element_by_css_selector(
+            "fieldset[name=windows] button"
+        )
+        elem.click()
+        time.sleep(3)
+        # задаем стандартный размер окон 1.17х1.46
+        elem = driver.find_element_by_id("js--windows_height_0")
+        elem.clear()
+        elem.send_keys('1.17')
+        elem = driver.find_element_by_id("js--windows_width_0")
+        elem.clear()
+        elem.send_keys('1.46')
+        # добавляем дверь
+        elem = driver.find_element_by_css_selector(
+            "fieldset[name=doors] button"
+        )
+        elem.click()
+        # задаем стандартный размер дверей 2.07х0.87
+        elem = driver.find_element_by_id("js--doors_height_0")
+        elem.clear()
+        elem.send_keys('2.07')
+        elem = driver.find_element_by_id("js--doors_width_0")
+        elem.clear()
+        elem.send_keys('0.87')
+        # задаем счетчик окон и дверей, который будет увеличиваться
+        # вместе с увеличением площади комнаты
+        windows_count = 0
+
+        # открываем сохраненную таблицу
+        filedesc = open("test53.csv", "r", encoding='windows-1251')
+        # считываем весь файл как список строк
+        filecontent = filedesc.readlines()
+        # цикл по строкам файла
+        for i in range(len(filecontent)):
+            # пропускаем первую строку с заголовком
+            if i > 0:
+                # разбиение строки на ячейки по символу ";"
+                cells = filecontent[i].split(";")
+                # увеличиваем значение счетчика окон и дверей
+                windows_count += 1
+                # вводим число окон
+                elem = driver.find_element_by_id("js--windows_count_0")
+                elem.clear()
+                elem.send_keys(windows_count)
+                # вводим число дверей
+                elem = driver.find_element_by_id("js--doors_count_0")
+                elem.clear()
+                elem.send_keys(windows_count)
+                # проверка корректности вычислений
+                # по первым двум столбцам (высота 2,25 м)
+                self.input_from_tables(float(cells[0]),float(cells[1]),53)
+                # запускаем расчет
+                elem = driver.find_element_by_class_name(
+                    "js--calcModelFormSubmit"
+                )
+                elem.click()
+                time.sleep(3)
+                # проверяем наличие результатов расчета
+                self.assertIn('Результаты расчета', driver.page_source)
+                # проверяем, что площадь совпадает с табличной
+                elem = driver.find_element_by_css_selector(
+                    "ul.data-list li:nth-child(1) strong"
+                )
+                print("Проверка для площади ", cells[1], ": ")
+                self.assertEqual(cells[2]+' шт', elem.text)
+                print("OK")
+        filedesc.close()
+
+
 
 if __name__ == '__main__':
     unittest.main()

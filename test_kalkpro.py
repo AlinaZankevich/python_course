@@ -257,6 +257,115 @@ class Kalkpro(unittest.TestCase):
                 print("OK")
         filedesc.close()
 
+# тестируем кнопочный калькулятор
+    def test_calc(self):
+        driver = self.driver
+        # открываем калькулятор
+        elem = driver.\
+            find_element_by_css_selector(".js--onclick-callCalc")
+        elem.click()
+        # ждем, пока калькулятор откроется
+        time.sleep(3)
+        # перебираем цифры от 0 до 9 (ноль не будет отображаться перед 1)
+        for i in range(10):
+            print("Нажатие кнопки ", str(i), ": ")
+            elem = driver.find_element_by_name(str(i))
+            elem.click()
+            print("OK")
+        # проверяем изображение на дисплее
+        # (ноль не будет отображаться перед 1)
+        elem = driver.find_element_by_class_name(
+            "display-indicator-ceils"
+        )
+        self.assertEqual(elem.text, '123456789')
+
+    def test_calc_sum(self):
+        driver = self.driver
+        # открываем калькулятор
+        elem = driver.\
+            find_element_by_css_selector(".js--onclick-callCalc")
+        elem.click()
+        # ждем, пока калькулятор откроется
+        time.sleep(3)
+
+        for name in ["1", "2", "+", "2", "5", "Result"]:
+            elem = driver.find_element_by_name(name)
+            elem.click()
+
+        print("OK")
+        # проверяем изображение на дисплее
+        # (ноль не будет отображаться перед 1)
+        elem = driver.find_element_by_class_name(
+            "display-indicator-ceils"
+        )
+        self.assertEqual(elem.text, '37')
+
+    def test_calc_diff(self):
+        driver = self.driver
+        # открываем калькулятор
+        elem = driver.\
+            find_element_by_css_selector(".js--onclick-callCalc")
+        elem.click()
+        # ждем, пока калькулятор откроется
+        time.sleep(3)
+
+        for name in ["4", "2", "-", "2", "0", "Result"]:
+            elem = driver.find_element_by_name(name)
+            elem.click()
+
+        print("OK")
+        # проверяем изображение на дисплее
+        # (ноль не будет отображаться перед 1)
+        elem = driver.find_element_by_class_name(
+            "display-indicator-ceils"
+        )
+        self.assertEqual(elem.text, '22')
+
+    def test_calc_mult(self):
+        driver = self.driver
+        # открываем калькулятор
+        elem = driver.\
+            find_element_by_css_selector(".js--onclick-callCalc")
+        elem.click()
+        # ждем, пока калькулятор откроется
+        time.sleep(3)
+
+        for name in ["5", "*", "1", "1", "Result"]:
+            elem = driver.find_element_by_name(name)
+            elem.click()
+
+        print("OK")
+        # проверяем изображение на дисплее
+        # (ноль не будет отображаться перед 1)
+        elem = driver.find_element_by_class_name(
+            "display-indicator-ceils"
+        )
+        self.assertEqual(elem.text, '55')
+
+    def test_calc_div(self):
+        driver = self.driver
+        # открываем калькулятор
+        elem = driver.\
+            find_element_by_css_selector(".js--onclick-callCalc")
+        elem.click()
+        # ждем, пока калькулятор откроется
+        time.sleep(3)
+
+        for name in ["4", "4", "/", "2", "Result"]:
+            elem = driver.find_element_by_name(name)
+            elem.click()
+
+        print("OK")
+        # проверяем изображение на дисплее
+        # (ноль не будет отображаться перед 1)
+        elem = driver.find_element_by_class_name(
+            "display-indicator-ceils"
+        )
+        self.assertEqual(elem.text, '22')
+
+
+
+
 
 
 if __name__ == '__main__':

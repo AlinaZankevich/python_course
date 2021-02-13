@@ -93,6 +93,72 @@ class Kalkpro(unittest.TestCase):
         )
         self.assertEqual(len(elems), 3)
 
+    # метод для проверки работы калькулятора
+    # при добавлении окон и дверей
+    def test_windows(self):
+        driver = self.driver
+        # пробуем ввести размер 1х1х1
+        self.input_walls_data(1, 1, 1)
+        # добавляем окно
+        elem = driver.find_element_by_css_selector(
+            "fieldset[name=windows] button"
+        )
+        elem.click()
+        time.sleep(3)
+        # задаем размеры окна 1х1 - во всю стену, кол-во окон - 1
+        elem = driver.find_element_by_id("js--windows_height_0")
+        elem.clear()
+        elem.send_keys(1)
+        elem = driver.find_element_by_id("js--windows_width_0")
+        elem.clear()
+        elem.send_keys(1)
+        elem = driver.find_element_by_id("js--windows_count_0")
+        elem.clear()
+        elem.send_keys(1)
+        # запускаем расчет
+        elem = driver.find_element_by_class_name(
+            "js--calcModelFormSubmit"
+        )
+        elem.click()
+        time.sleep(3)
+        # проверяем наличие результатов расчета
+        self.assertIn('Результаты расчета', driver.page_source)
+        # проверяем, что площадь трех стен размером 1х1 равна 4
+        elem = driver.find_element_by_css_selector(
+            "ul.data-list li:nth-child(4) strong"
+        )
+        self.assertEqual('3 м²', elem.text)
+
+        # добавляем дверь
+        elem = driver.find_element_by_css_selector(
+            "fieldset[name=doors] button"
+        )
+        elem.click()
+        time.sleep(3)
+        # задаем размеры двери 1х1 - во всю стену, кол-во дверей - 1
+        elem = driver.find_element_by_id("js--doors_height_0")
+        elem.clear()
+        elem.send_keys(1)
+        elem = driver.find_element_by_id("js--doors_width_0")
+        elem.clear()
+        elem.send_keys(1)
+        elem = driver.find_element_by_id("js--doors_count_0")
+        elem.clear()
+        elem.send_keys(1)
+        # запускаем расчет
+        elem = driver.find_element_by_class_name(
+            "js--calcModelFormSubmit"
+        )
+        elem.click()
+        time.sleep(3)
+        # проверяем наличие результатов расчета
+        self.assertIn('Результаты расчета', driver.page_source)
+        # проверяем, что площадь двух стен размером 1х1 равна 4
+        elem = driver.find_element_by_css_selector(
+            "ul.data-list li:nth-child(4) strong"
+        )
+        self.assertEqual('2 м²', elem.text)
+
 
 if __name__ == '__main__':
     unittest.main()
